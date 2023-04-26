@@ -12,21 +12,7 @@ import contributors.User
  The corresponding test can be found in test/tasks/AggregationKtTest.kt.
  You can use 'Navigate | Test' menu action (note the shortcut) to navigate to the test.
 */
-fun List<User>.aggregate(): List<User> {
-    val userMap = HashMap<String, Int>()
-    val newList = ArrayList<User>()
-    this.forEach { user ->
-        if (userMap.contains(user.login)) {
-            var oldValue = userMap[user.login]!!
-            oldValue += user.contributions
-            userMap[user.login] = oldValue
-        }
-        else{
-            userMap[user.login] = user.contributions
-        }
-    }
-    userMap.forEach { element ->
-        newList.add(User(element.key, element.value))
-    }
-    return newList
-}
+fun List<User>.aggregate(): List<User> =
+    groupBy { it.login }
+        .map { (login, group) -> User(login, group.sumOf { it.contributions }) }
+        .sortedByDescending { it.contributions }
