@@ -88,7 +88,7 @@ interface Contributors : CoroutineScope {
                     withContext(Dispatchers.Main) {
                         updateResults(users, startTime)
                     }
-                }
+                }.setUpCancellation()
             }
 
             NOT_CANCELLABLE -> { // Performing requests in a non-cancellable way
